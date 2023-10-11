@@ -11,6 +11,7 @@ import FormAddFriend from "./components/FormAddFriend/FormAddFriend.jsx";
 function App() {
   const [friends, setFriends] = useState(initialFriends);
   const [showAddFriends, setShowAddFriends] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState(null);
 
   function handelAdd(friend) {
     setFriends((friends) => [...friends, friend]);
@@ -21,26 +22,31 @@ function App() {
     setShowAddFriends((show) => !show);
   }
 
+  function handelSelection(friend) {
+    // setSelectedFriend(friend);
+
+    setSelectedFriend((cur) => (cur?.id === friend.id ? null : friend));
+    setShowAddFriends(false);
+  }
+
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList friends={friends} />
+        <FriendsList
+          friends={friends}
+          onSelection={handelSelection}
+          selectedFriend={selectedFriend}
+        />
         {showAddFriends && <FormAddFriend onAddFriends={handelAdd} />}
+
         <Button onClick={handelShowFriend}>
           {showAddFriends ? "Closed" : "Add Friends"}
         </Button>
-
-        {/* {isOpen ? (
-          <FormAddFriend onAdd={handelAdd} />
-        ) : (
-          <Button onClick={handelIsOpen}>Add Friends</Button>
-        )} */}
-        {/* <FormAddFriend onAdd={handelAdd} /> */}
       </div>
-      <FormSplitBill />
+      {selectedFriend && <FormSplitBill selectedFriend={selectedFriend} />}
     </div>
   );
 }
 
 export default App;
-// 8/99
+// 8/100
